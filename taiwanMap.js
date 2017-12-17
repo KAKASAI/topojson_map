@@ -1,11 +1,12 @@
 d3.json('county.json', function(topodata) {
     const features = topojson.feature(topodata, topodata.objects['COUNTY_MOI_1060525']).features;
-    console.log(features);
+    // console.log(features);
     const path = d3.geo.path().projection(
         d3.geo.mercator().center([121, 24]).scale(6000)
     );
     d3.select('svg').selectAll('path').data(features)
         .enter().append('path').attr('d', path);
+    //各縣市人口數
     const density = {
         '臺北市': 9872.42,
         '嘉義市': 4487.05,
@@ -34,25 +35,25 @@ d3.json('county.json', function(topodata) {
     for (let i = features.length - 1; i >= 0; i--) {
         features[i].properties.density = density[features[i].properties.COUNTYNAME];
     };
-    console.log(features);
+    // console.log(features);
     const color = d3.scale.linear().domain([0, 10000]).range(['#FFEDA0', '#f00']);
 
-    function updata() {
-        d3.select('svg').selectAll('path').data(features).attr({
-            d: path,
-            fill: function(d) {
-                return color(d.properties.density);
-            }
-        }).on('mouseover', function(d) {
-            document.getElementById('name').textContent = d.properties.COUNTYNAME;
-            document.getElementById('density').textContent = d.properties.density;
-            console.log(d);
-        });
-    }
-
-    d3.select('svg').on('mouseover', function(e) {
-        console.log(d3.mouse(this));
-        updata();
+    // function updata() {
+    d3.select('svg').selectAll('path').data(features).attr({
+        d: path,
+        fill: function(d) {
+            return color(d.properties.density);
+        }
+    }).on('mouseover', function(d) {
+        document.getElementById('name').textContent = d.properties.COUNTYNAME;
+        document.getElementById('density').textContent = d.properties.density;
+        // console.log(d);
     });
-    updata();
+    // }
+
+    // d3.select('svg').on('mouseover', function(e) {
+    //     console.log(d3.mouse(this));
+    //     updata();
+    // });
+    // updata();
 });
