@@ -41,10 +41,8 @@ d3.json('county.json', function(topodata) {
     // function updata() {
     d3.select('svg').selectAll('path').data(features).attr({
         d: path,
-        fill: function(d) {
-            return color(d.properties.density);
-        }
-    }).on('mouseover', function(d) {
+        fill: (d) => color(d.properties.density)
+    }).on('mouseover', (d) => {
         document.getElementById('name').textContent = d.properties.COUNTYNAME;
         document.getElementById('density').textContent = d.properties.density;
         // console.log(d);
